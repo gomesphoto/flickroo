@@ -1,21 +1,37 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import styled from "styled-components";
+import { photosSearch } from "../redux/_photos";
+
+const StyledWrapper = styled.div`
+  padding: 25px;
+`;
+
+const StyledLogo = styled.img`
+  width: 200px;
+`;
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+  onSubmit = () => {
+    this.props.photosSearch();
+  };
+  render = () => (
+    <StyledWrapper fetching={this.props.fetching}>
+      <StyledLogo src={logo} alt="App Logo" />
+    </StyledWrapper>
     );
-  }
 }
 
-export default App;
+App.propTypes = {
+  photosSearch: PropTypes.func.isRequired,
+  fetching: PropTypes.bool.isRequired
+};
+
+const reduxProps = ({ photos }) => ({
+  fetching: photos.fetching
+});
+
+export default connect(reduxProps, {
+  photosSearch
+})(App);
