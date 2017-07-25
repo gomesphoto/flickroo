@@ -11,6 +11,11 @@ const fadein = keyframes`
   100% { opacity: 1 }
 `;
 
+const StyledAnchor = styled.a`
+  width: 100%;
+  height: 60%;
+`
+
 const StyledPhoto = styled.div`
   width: 250px;
   height: 300px;
@@ -24,7 +29,7 @@ const StyledPhoto = styled.div`
 
 const StyledImage = styled.div`
   width: 100%;
-  height: 60%;
+  height: 100%;
   margin-bottom: 15px;
   background-color: rgb(${colors.lightGrey});
   background-image: url(${({ img }) => img ? img : placeholder});
@@ -53,13 +58,15 @@ const parseDescription = description => {
 
 const Photo = ({ photo, onSelectTag, ...otherProps }) => (
   <StyledPhoto {...otherProps}>
-    <StyledImage img={photo.url_s} />
+    <StyledAnchor href={`https://www.flickr.com/photos/${photo.owner}/${photo.id}`} rel="noreferrer noopener" target="_blank">
+      <StyledImage img={photo.url_s} />
+    </StyledAnchor>
     <div>
       <a href={`https://www.flickr.com/photos/${photo.owner}/${photo.id}`} rel="noreferrer noopener" target="_blank">
         <StyledTitle>{photo.title}</StyledTitle>
       </a>
       <a href={`https://www.flickr.com/photos/${photo.owner}`} rel="noreferrer noopener" target="_blank">
-        <span>by {photo.realname ? photo.realname : photo.ownername}</span>
+        <span>{`by ${photo.realname ? photo.realname : photo.ownername}`}</span>
       </a>
     </div>
     <StyledDescription>{parseDescription(photo.description._content)}</StyledDescription>
