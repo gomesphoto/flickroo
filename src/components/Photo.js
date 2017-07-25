@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { keyframes } from "styled-components";
 import placeholder from '../assets/placeholder.png';
+import Tags from './Tags';
 import { stripHTML, ellipseText } from '../helpers/utilities';
 import { colors, fonts } from '../styles';
 
@@ -44,44 +45,31 @@ const StyledDescription = styled.div`
   font-size: ${fonts.small};
 `;
 
-const StyledTagContainer = styled.div`
-  display: flex;
-  overflow-y: scroll;
-`;
-
-const StyledTag = styled.div`
-  background: rgb(${colors.mediumGrey});
-  padding: 4px;
-  margin-right: 4px;
-  display: flex;
-  align-items: center;
-  &:hover {
-    opacity: 0.7;
-  }
-`;
-
 const parseDescription = description => {
   const noHTML = stripHTML(description);
   const ellipsed = ellipseText(noHTML, 140);
   return ellipsed;
 }
 
-const Photo = ({ photo, ...otherProps }) => (
+const Photo = ({ photo, onSelectTag, ...otherProps }) => (
   <StyledPhoto {...otherProps}>
     <StyledImage img={photo.url_s} />
     <div>
-      <StyledTitle>{photo.title}</StyledTitle>
-      <span>By {photo.realname ? photo.realname : photo.ownername}</span>
+      <a href={`https://www.flickr.com/photos/${photo.owner}/${photo.id}`} rel="noreferrer noopener" target="_blank">
+        <StyledTitle>{photo.title}</StyledTitle>
+      </a>
+      <a href={`https://www.flickr.com/photos/${photo.owner}`} rel="noreferrer noopener" target="_blank">
+        <span>by {photo.realname ? photo.realname : photo.ownername}</span>
+      </a>
     </div>
     <StyledDescription>{parseDescription(photo.description._content)}</StyledDescription>
-    <StyledTagContainer>
-      {photo.tags.split(" ").map(tag => <StyledTag key={tag}>{tag}</StyledTag>)}
-    </StyledTagContainer>
+    <Tags tags={photo.tags} onSelectTag={onSelectTag} />
   </StyledPhoto>
 );
 
 Photo.propTypes = {
-  photo: PropTypes.object.isRequired
+  photo: PropTypes.object.isRequired,
+  onSelectTag: PropTypes.func.isRequired
 };
 
 export default Photo;

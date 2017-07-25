@@ -1,7 +1,7 @@
 /**
  * @desc strip html tags from string
  * @param  {String}  [string='']
- * @return {Session}
+ * @return {String}
  */
 export const stripHTML = string => {
   var tmp = document.createElement("DIV");

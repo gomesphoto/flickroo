@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import Photo from './Photo';
 import Spinner from './Spinner';
-import styled from 'styled-components';
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -29,10 +29,11 @@ class PhotosContainer extends Component {
     }
   }
   render() {
-    const { fetching, photos, ...otherProps } = this.props;
+    const { fetching, photos, onSelectTag, ...otherProps } = this.props;
     return (
       <StyledContainer {...otherProps}>
-        {photos.map((photo, idx) => <Photo key={photo.id} photo={photo} />)}
+        {photos.map((photo, idx) =>
+          <Photo key={photo.id} photo={photo} onSelectTag={onSelectTag} />)}
         <Spinner show={fetching} />
       </StyledContainer>
     )
@@ -42,6 +43,7 @@ class PhotosContainer extends Component {
 PhotosContainer.propTypes = {
   fetching: PropTypes.bool.isRequired,
   onScroll: PropTypes.func.isRequired,
+  onSelectTag: PropTypes.func.isRequired,
   photos: PropTypes.array.isRequired
 };
 

@@ -5,10 +5,13 @@ const PHOTOS_SEARCH_REQUEST = "photos/PHOTOS_SEARCH_REQUEST";
 const PHOTOS_SEARCH_SUCCESS = "photos/PHOTOS_SEARCH_SUCCESS";
 const PHOTOS_SEARCH_FAILURE = "photos/PHOTOS_SEARCH_FAILURE";
 
+const PHOTOS_SEARCH_CLEAR = "photos/PHOTOS_SEARCH_CLEAR";
+
 const PHOTOS_SEARCH_UPDATE_QUERY = "photos/PHOTOS_SEARCH_UPDATE_QUERY";
 
 // -- Actions --------------------------------------------------------------- //
-export const photosSearch = (query, page) => (dispatch, prevState) => {
+export const photosSearch = (query, page, clear) => (dispatch, prevState) => {
+  if (clear) dispatch({ type: PHOTOS_SEARCH_CLEAR })
   dispatch({ type: PHOTOS_SEARCH_REQUEST });
   const { photos } = prevState();
   const prevPhotos = photos.photos;
@@ -46,6 +49,8 @@ const INITIAL_STATE = {
 
 export const photosReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case PHOTOS_SEARCH_CLEAR:
+      return { ...state, photos: [] };
     case PHOTOS_SEARCH_REQUEST:
       return { ...state, fetching: true };
     case PHOTOS_SEARCH_SUCCESS:

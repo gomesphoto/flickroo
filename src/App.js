@@ -17,8 +17,14 @@ const StyledWrapper = styled.div`
 `;
 
 const StyledLogo = styled.img`
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   margin: 40px;
+  padding: 10px;
+`;
+
+const SForm = styled(Form)`
+  padding: 0 20px;
 `;
 
 class App extends Component {
@@ -27,29 +33,37 @@ class App extends Component {
     page: 1
   }
   onSubmit = () => {
-    this.props.photosSearch(this.state.input, 1);
+    this.setState({ page: 1 });
+    this.props.photosSearch(this.state.input, 1, true);
   };
   onScroll = () => {
-    const page = this.state.page + 1
-    this.setState({ page });
-    this.props.photosSearch(this.props.query, page);
+    if (this.props.query) {
+      const page = this.state.page + 1
+      this.setState({ page });
+      this.props.photosSearch(this.props.query, page);
+    }
+  }
+  onSelectTag = tag => {
+    this.setState({ page: 1 });
+    this.props.photosSearch(tag, 1, true);
   }
   render = () => (
     <StyledWrapper>
       <FadeIn>
         <Column>
           <StyledLogo src={logo} alt="Flickroo" />
-          <Form onSubmit={this.onSubmit}>
+          <SForm onSubmit={this.onSubmit}>
             <Input
               label={'Search Photos'}
               value={this.state.input}
               onValueChange={input => this.setState({ input })}
             />
-          </Form>
+          </SForm>
         </Column>
         <PhotosContainer
-          onScroll={this.onScroll}
           fetching={this.props.fetching}
+          onScroll={this.onScroll}
+          onSelectTag={this.onSelectTag}
           photos={this.props.photos}
         />
       </FadeIn>
