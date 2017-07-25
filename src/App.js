@@ -1,37 +1,64 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import styled from "styled-components";
-import { photosSearch } from "../redux/_photos";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
+import FadeIn from './components/FadeIn';
+import Column from './components/Column';
+import Form from './components/Form';
+import Input from './components/Input';
+import PhotosContainer from './components/PhotosContainer';
+import logo from './assets/logo.svg';
+import { photosSearch } from './redux/_photos';
 
 const StyledWrapper = styled.div`
-  padding: 25px;
+  height: 100%;
+  width: 100%;
+  position: relative;
 `;
 
 const StyledLogo = styled.img`
-  width: 200px;
+  width: 400px;
+  margin: 40px;
 `;
 
 class App extends Component {
+  state = {
+    query: ''
+  }
   onSubmit = () => {
-    this.props.photosSearch();
+    this.props.photosSearch(this.state.query);
   };
   render = () => (
-    <StyledWrapper fetching={this.props.fetching}>
-      <StyledLogo src={logo} alt="App Logo" />
+    <StyledWrapper>
+      <FadeIn>
+        <Column>
+          <StyledLogo src={logo} alt="Flickroo" />
+          <Form onSubmit={this.onSubmit}>
+            <Input
+              label={'Search Photos'}
+              value={this.state.query}
+              onValueChange={query => this.setState({ query })}
+            />
+          </Form>
+        </Column>
+        <PhotosContainer
+          fetching={this.props.fetching}
+          photos={this.props.photos}
+        />
+      </FadeIn>
     </StyledWrapper>
     );
 }
 
 App.propTypes = {
   photosSearch: PropTypes.func.isRequired,
-  fetching: PropTypes.bool.isRequired
+  fetching: PropTypes.bool.isRequired,
+  photos:  PropTypes.array.isRequired
 };
 
 const reduxProps = ({ photos }) => ({
-  fetching: photos.fetching
+  fetching: photos.fetching,
+  photos:  photos.photos
 });
 
-export default connect(reduxProps, {
-  photosSearch
-})(App);
+export default connect(reduxProps, { photosSearch })(App);

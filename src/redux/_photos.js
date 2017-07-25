@@ -1,4 +1,4 @@
-import { apiSearchPhotos } from "../helpers/api";
+import { apiPhotosSearch } from "../helpers/api";
 
 // -- Constants ------------------------------------------------------------- //
 const PHOTOS_SEARCH_REQUEST = "photos/PHOTOS_SEARCH_REQUEST";
@@ -6,17 +6,19 @@ const PHOTOS_SEARCH_SUCCESS = "photos/PHOTOS_SEARCH_SUCCESS";
 const PHOTOS_SEARCH_FAILURE = "photos/PHOTOS_SEARCH_FAILURE";
 
 // -- Actions --------------------------------------------------------------- //
-export const photosSearch = (email, password) => dispatch => {
+export const photosSearch = (query) => dispatch => {
   dispatch({ type: PHOTOS_SEARCH_REQUEST });
-  apiLogin(query)
+  apiPhotosSearch(query)
   .then(({ data }) => {
     dispatch({
       type: PHOTOS_SEARCH_SUCCESS,
-      payload: data
+      payload: data.photos.photo
     });
   })
-  .catch(error =>
-    dispatch({ type: PHOTOS_SEARCH_FAILURE }));
+  .catch((error) => {
+    console.log(error);
+    dispatch({ type: PHOTOS_SEARCH_FAILURE });
+  });
 };
 
 // -- Reducer --------------------------------------------------------------- //
