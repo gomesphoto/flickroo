@@ -2,8 +2,10 @@
   "name": "flickroo",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://gomesphoto.github.io/flickroo",
   "dependencies": {
     "axios": "^0.16.2",
+    "gh-pages": "^1.0.0",
     "moment": "^2.18.1",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
@@ -16,6 +18,8 @@
     "styled-components": "^2.1.1"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
