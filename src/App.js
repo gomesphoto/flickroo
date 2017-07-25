@@ -23,11 +23,17 @@ const StyledLogo = styled.img`
 
 class App extends Component {
   state = {
-    query: ''
+    input: '',
+    page: 1
   }
   onSubmit = () => {
-    this.props.photosSearch(this.state.query);
+    this.props.photosSearch(this.state.input, 1);
   };
+  onScroll = () => {
+    const page = this.state.page + 1
+    this.setState({ page });
+    this.props.photosSearch(this.props.query, page);
+  }
   render = () => (
     <StyledWrapper>
       <FadeIn>
@@ -36,12 +42,13 @@ class App extends Component {
           <Form onSubmit={this.onSubmit}>
             <Input
               label={'Search Photos'}
-              value={this.state.query}
-              onValueChange={query => this.setState({ query })}
+              value={this.state.input}
+              onValueChange={input => this.setState({ input })}
             />
           </Form>
         </Column>
         <PhotosContainer
+          onScroll={this.onScroll}
           fetching={this.props.fetching}
           photos={this.props.photos}
         />
@@ -53,11 +60,13 @@ class App extends Component {
 App.propTypes = {
   photosSearch: PropTypes.func.isRequired,
   fetching: PropTypes.bool.isRequired,
+  query: PropTypes.string.isRequired,
   photos:  PropTypes.array.isRequired
 };
 
 const reduxProps = ({ photos }) => ({
   fetching: photos.fetching,
+  query: photos.query,
   photos:  photos.photos
 });
 

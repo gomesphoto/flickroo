@@ -1,9 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { keyframes } from "styled-components";
 import placeholder from '../assets/placeholder.png';
 import { stripHTML, ellipseText } from '../helpers/utilities';
 import { colors, fonts } from '../styles';
+
+const fadein = keyframes`
+  0% { opacity: 0 }
+  100% { opacity: 1 }
+`;
 
 const StyledPhoto = styled.div`
   width: 250px;
@@ -13,6 +18,7 @@ const StyledPhoto = styled.div`
   display: flex;
   flex-direction: column;
   box-shadow: 0px 6px 20px 8px rgba(${colors.black}, 0.3);
+  animation: ${fadein} 0.5s 1 linear;
 `;
 
 const StyledImage = styled.div`

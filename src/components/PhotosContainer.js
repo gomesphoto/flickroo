@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import Photo from './Photo';
 import Spinner from './Spinner';
@@ -13,15 +13,35 @@ const StyledContainer = styled.div`
   justify-content: center;
 `;
 
-const PhotosContainer = ({ fetching, photos, ...otherProps }) => (
-  <StyledContainer {...otherProps}>
-    {photos.map(photo => <Photo key={photo.id} photo={photo} />)}
-    {!!fetching && <Spinner />}
-  </StyledContainer>
-);
+class PhotosContainer extends Component {
+  componentDidMount() {
+    window.addEventListener("scroll", this.onScrollEvent);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.onScrollEvent);
+  }
+
+  onScrollEvent = () => {
+    const documentHeight = document.body.scrollHeight - document.body.offsetHeight;
+    if (documentHeight - 20 <= window.scrollY && !this.props.fetching) {
+      this.props.onScroll();
+    }
+  }
+  render() {
+    const { fetching, photos, ...otherProps } = this.props;
+    return (
+      <StyledContainer {...otherProps}>
+        {photos.map((photo, idx) => <Photo key={photo.id} photo={photo} />)}
+        <Spinner show={fetching} />
+      </StyledContainer>
+    )
+  }
+}
 
 PhotosContainer.propTypes = {
   fetching: PropTypes.bool.isRequired,
+  onScroll: PropTypes.func.isRequired,
   photos: PropTypes.array.isRequired
 };
 
