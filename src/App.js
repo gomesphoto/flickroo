@@ -44,7 +44,7 @@ class App extends Component {
     }
   }
   onSelectTag = tag => {
-    this.setState({ page: 1 });
+    this.setState({ input: tag, page: 1 });
     this.props.photosSearch(tag, 1, true);
   }
   render = () => (
